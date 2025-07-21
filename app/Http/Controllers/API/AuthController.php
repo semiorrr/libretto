@@ -54,6 +54,23 @@ class AuthController extends Controller
     ]);
 }
 
+    public function register(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string|unique:users,username',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = User::create([
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json([
+            'message' => 'User registered successfully',
+            'user' => $user,
+        ], 201);
+    }
 
 
     public function logout(Request $request)
